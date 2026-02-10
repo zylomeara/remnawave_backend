@@ -465,7 +465,7 @@ export class MihomoGeneratorService {
             node.sni = host.sni;
         }
 
-        node.fingerprint = host.fingerprint || 'chrome';
+        node['client-fingerprint'] = host.fingerprint || 'chrome';
 
         if (host.alpn) {
             node.alpn = host.alpn.split(',');

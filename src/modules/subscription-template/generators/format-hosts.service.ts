@@ -192,9 +192,7 @@ export class FormatHostsService {
                     inputHost.serverDescription !== undefined &&
                     inputHost.serverDescription !== null
                 ) {
-                    serverDescription = Buffer.from(inputHost.serverDescription).toString(
-                        'base64',
-                    );
+                    serverDescription = Buffer.from(inputHost.serverDescription).toString('base64');
                 }
 
                 let dbData: IFormattedHost['dbData'] | undefined;
@@ -230,10 +228,7 @@ export class FormatHostsService {
                     spiderX: '',
                     password: {
                         trojanPassword: user.trojanPassword,
-                        vlessPassword: setVlessRouteForUuid(
-                            user.vlessUuid,
-                            inputHost.vlessRouteId,
-                        ),
+                        vlessPassword: setVlessRouteForUuid(user.vlessUuid, inputHost.vlessRouteId),
                         ssPassword: user.ssPassword,
                     },
                     serverDescription,
