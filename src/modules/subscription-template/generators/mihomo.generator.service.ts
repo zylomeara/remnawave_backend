@@ -201,6 +201,18 @@ export class MihomoGeneratorService {
 
         const proxyRemark = host.remark;
 
+        if (host.protocol === 'hysteria2') {
+            const node = this.makeHysteria2Node(host);
+
+            if (host.serverDescription && isFlClashX) {
+                node.serverDescription = Buffer.from(host.serverDescription, 'base64').toString();
+            }
+
+            data.proxies.push(node);
+            proxyRemarks.push(proxyRemark);
+            return;
+        }
+
         const node = this.makeNode({
             name: host.remark,
             remark: proxyRemark,
