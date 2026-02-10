@@ -438,4 +438,33 @@ export class MihomoGeneratorService {
 
         return config;
     }
+
+    private makeHysteria2Node(host: IFormattedHost): ProxyNode {
+        const node: ProxyNode = {
+            name: host.remark,
+            type: 'hysteria2',
+            server: host.address,
+            port: Number(host.port),
+            password: host.password.trojanPassword,
+            udp: true,
+        };
+
+        if (host.sni) {
+            node.sni = host.sni;
+        }
+
+        node.fingerprint = host.fingerprint || 'chrome';
+
+        if (host.alpn) {
+            node.alpn = host.alpn.split(',');
+        } else {
+            node.alpn = ['h3'];
+        }
+
+        if (host.allowInsecure) {
+            node['skip-cert-verify'] = host.allowInsecure;
+        }
+
+        return node;
+    }
 }
