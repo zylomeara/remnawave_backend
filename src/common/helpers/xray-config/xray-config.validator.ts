@@ -81,21 +81,11 @@ export class XRayConfig {
 
         const seenTags = new Set<string>();
         for (const inbound of this.config.inbounds) {
-            const network = inbound.streamSettings?.network;
-
-            if (
-                network &&
-                !['grpc', 'httpupgrade', 'raw', 'tcp', 'ws', 'xhttp'].includes(network)
-            ) {
-                throw new Error(
-                    `Invalid network type "${network}" in inbound "${inbound.tag}". Allowed values are: raw (or tcp), ws, httpupgrade, xhttp and grpc`,
-                );
-            }
-
             if (
                 ![
                     'dokodemo-door',
                     'http',
+                    'hysteria2',
                     'mixed',
                     'shadowsocks',
                     'trojan',
@@ -104,8 +94,21 @@ export class XRayConfig {
                 ].includes(inbound.protocol)
             ) {
                 throw new Error(
-                    `Invalid protocol in inbound "${inbound.tag}". Allowed values are: shadowsocks, trojan, vless, dokodemo-door, http, mixed, wireguard`,
+                    `Invalid protocol in inbound "${inbound.tag}". Allowed values are: shadowsocks, trojan, vless, hysteria2, dokodemo-door, http, mixed, wireguard`,
                 );
+            }
+
+            if (!this.isExternalProtocol(inbound.protocol)) {
+                const network = inbound.streamSettings?.network;
+
+                if (
+                    network &&
+                    !['grpc', 'httpupgrade', 'raw', 'tcp', 'ws', 'xhttp'].includes(network)
+                ) {
+                    throw new Error(
+                        `Invalid network type "${network}" in inbound "${inbound.tag}". Allowed values are: raw (or tcp), ws, httpupgrade, xhttp and grpc`,
+                    );
+                }
             }
 
             // console.log(`Inbound ${inbound.tag} network: ${network || 'not set'}`);
@@ -158,7 +161,9 @@ export class XRayConfig {
 
     public leaveInbounds(tags: Set<string>): void {
         this.config.inbounds = this.config.inbounds.filter(
-            (inbound) => tags.has(inbound.tag) || !this.isInboundWithUsers(inbound.protocol),
+            (inbound) =>
+                !this.isExternalProtocol(inbound.protocol) &&
+                (tags.has(inbound.tag) || !this.isInboundWithUsers(inbound.protocol)),
         );
     }
 
@@ -371,6 +376,8 @@ export class XRayConfig {
                     });
                 }
                 break;
+            case 'hysteria2':
+                break;
             default:
                 throw new Error(`Protocol ${inbound.protocol} is not supported.`);
         }
@@ -420,7 +427,10 @@ export class XRayConfig {
         const publicKeyMap = new Map<string, string>();
 
         for (const inbound of this.config.inbounds) {
-            if (['dokodemo-door', 'http', 'mixed', 'wireguard'].includes(inbound.protocol)) {
+            if (
+                ['dokodemo-door', 'http', 'mixed', 'wireguard'].includes(inbound.protocol) ||
+                this.isExternalProtocol(inbound.protocol)
+            ) {
                 continue;
             }
 
@@ -486,6 +496,10 @@ export class XRayConfig {
 
     private isInboundWithUsers(protocol: string): boolean {
         return !['dokodemo-door', 'http', 'mixed', 'wireguard'].includes(protocol);
+    }
+
+    private isExternalProtocol(protocol: string): boolean {
+        return ['hysteria2'].includes(protocol);
     }
 
     public replaceSnippets(snippets: Map<string, unknown>): void {

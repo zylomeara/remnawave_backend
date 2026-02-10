@@ -22,6 +22,8 @@ interface OutboundConfig {
     path?: string;
     max_early_data?: number;
     early_data_header_name?: string;
+    up_mbps?: number;
+    down_mbps?: number;
 }
 
 interface TlsConfig {
@@ -85,7 +87,7 @@ export class SingBoxGeneratorService {
     }
 
     private renderConfig(config: Record<string, any>): string {
-        const urltest_types = ['vless', 'trojan', 'shadowsocks'];
+        const urltest_types = ['vless', 'trojan', 'shadowsocks', 'hysteria2'];
         const urltest_tags = config.outbounds
             .filter((outbound: OutboundConfig) => urltest_types.includes(outbound.type))
             .map((outbound: OutboundConfig) => outbound.tag);
@@ -263,7 +265,7 @@ export class SingBoxGeneratorService {
             config.network = 'tcp';
         }
 
-        if (['httpupgrade', 'ws'].includes(params.network)) {
+        if (params.network && ['httpupgrade', 'ws'].includes(params.network)) {
             let max_early_data: number | undefined;
             let early_data_header_name: string | undefined;
 
@@ -323,6 +325,22 @@ export class SingBoxGeneratorService {
                 case 'shadowsocks':
                     outbound.password = host.password.ssPassword;
                     outbound.method = 'chacha20-ietf-poly1305';
+                    break;
+                case 'hysteria2':
+                    outbound.password = host.password.trojanPassword;
+                    outbound.up_mbps = 100;
+                    outbound.down_mbps = 100;
+                    if (!outbound.tls) {
+                        outbound.tls = this.tlsConfig(
+                            host.sni,
+                            host.fingerprint,
+                            'tls',
+                            undefined,
+                            undefined,
+                            host.alpn || 'h3',
+                            host.allowInsecure,
+                        );
+                    }
                     break;
             }
 

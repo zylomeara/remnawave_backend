@@ -181,6 +181,69 @@ export class FormatHostsService {
                 address = address.replace('*', this.nanoid()).trim();
             }
 
+            if (inbound.protocol === 'hysteria2') {
+                let sni = inputHost.sni || '';
+                if (!sni && this.domainRegex.test(address)) {
+                    sni = address;
+                }
+
+                let serverDescription: string | undefined;
+                if (
+                    inputHost.serverDescription !== undefined &&
+                    inputHost.serverDescription !== null
+                ) {
+                    serverDescription = Buffer.from(inputHost.serverDescription).toString(
+                        'base64',
+                    );
+                }
+
+                let dbData: IFormattedHost['dbData'] | undefined;
+                if (returnDbHost) {
+                    dbData = {
+                        rawInbound: inputHost.rawInbound,
+                        inboundTag: inputHost.inboundTag,
+                        uuid: inputHost.uuid,
+                        configProfileUuid: inputHost.configProfileUuid,
+                        configProfileInboundUuid: inputHost.configProfileInboundUuid,
+                        isDisabled: inputHost.isDisabled,
+                        viewPosition: inputHost.viewPosition,
+                        remark: inputHost.remark,
+                        isHidden: inputHost.isHidden,
+                        tag: inputHost.tag,
+                        vlessRouteId: inputHost.vlessRouteId,
+                    };
+                }
+
+                formattedHosts.push({
+                    remark: finalRemark,
+                    address,
+                    port: inputHost.port,
+                    protocol: 'hysteria2',
+                    path: '',
+                    host: '',
+                    tls: 'tls',
+                    sni,
+                    alpn: inputHost.alpn || '',
+                    publicKey: '',
+                    fingerprint: inputHost.fingerprint || '',
+                    shortId: '',
+                    spiderX: '',
+                    password: {
+                        trojanPassword: user.trojanPassword,
+                        vlessPassword: setVlessRouteForUuid(
+                            user.vlessUuid,
+                            inputHost.vlessRouteId,
+                        ),
+                        ssPassword: user.ssPassword,
+                    },
+                    serverDescription,
+                    allowInsecure: inputHost.allowInsecure,
+                    dbData,
+                    xrayJsonTemplate: inputHost.xrayJsonTemplate,
+                });
+                continue;
+            }
+
             const port = inputHost.port;
             let network = inbound.streamSettings?.network || 'tcp';
 

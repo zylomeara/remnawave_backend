@@ -20,7 +20,7 @@ export interface IRawHost {
     alpn: string;
     fingerprint: string;
     host: string;
-    network: StreamSettingsObject['network'];
+    network?: StreamSettingsObject['network'];
     password: {
         ssPassword: string;
         trojanPassword: string;

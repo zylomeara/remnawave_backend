@@ -6,7 +6,7 @@ export interface InboundObject {
     allocate?: unknown;
     listen?: string;
     port: number | string | undefined;
-    protocol: 'shadowsocks' | 'trojan' | 'vless';
+    protocol: 'shadowsocks' | 'trojan' | 'vless' | 'hysteria2';
     settings?: InboundSettings;
     sniffing?: unknown;
     streamSettings?: StreamSettingsObject;

@@ -188,7 +188,7 @@ export class XrayGeneratorService {
         };
 
         const network = params.network;
-        if (network in NETWORK_CONFIGS) {
+        if (network && network in NETWORK_CONFIGS) {
             Object.assign(
                 payload,
                 NETWORK_CONFIGS[network as StreamSettingsObject['network']](params),
