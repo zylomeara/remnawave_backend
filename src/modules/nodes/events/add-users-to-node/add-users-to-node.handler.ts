@@ -56,7 +56,9 @@ export class AddUsersToNodeHandler implements IEventHandler<AddUsersToNodeEvent>
 
                     if (inbounds.length === 0) continue;
 
-                    const filteredInbounds = inbounds.filter((ib) => activeTags.has(ib.tag));
+                    const filteredInbounds = inbounds.filter(
+                        (ib) => activeTags.has(ib.tag) && ib.type !== 'hysteria2',
+                    );
 
                     if (filteredInbounds.length === 0) {
                         usersToRemove.push({ userId: tId.toString(), hashUuid: vlessUuid });

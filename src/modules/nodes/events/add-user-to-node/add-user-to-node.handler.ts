@@ -50,38 +50,40 @@ export class AddUserToNodeHandler implements IEventHandler<AddUserToNodeEvent> {
                     prevVlessUuid: event.prevVlessUuid,
                 },
 
-                data: inbounds.map((inbound) => {
-                    const inboundType = inbound.type;
+                data: inbounds
+                    .filter((ib) => ib.type !== 'hysteria2')
+                    .map((inbound) => {
+                        const inboundType = inbound.type;
 
-                    switch (inboundType) {
-                        case 'trojan':
-                            return {
-                                type: inboundType,
-                                username: tId.toString(),
-                                password: trojanPassword,
-                                tag: inbound.tag,
-                            };
-                        case 'vless':
-                            return {
-                                type: inboundType,
-                                username: tId.toString(),
-                                uuid: vlessUuid,
-                                flow: getVlessFlowFromDbInbound(inbound),
-                                tag: inbound.tag,
-                            };
-                        case 'shadowsocks':
-                            return {
-                                type: inboundType,
-                                username: tId.toString(),
-                                password: ssPassword,
-                                tag: inbound.tag,
-                                cipherType: CipherType.CHACHA20_POLY1305,
-                                ivCheck: false,
-                            };
-                        default:
-                            throw new Error(`Unsupported inbound type: ${inboundType}`);
-                    }
-                }),
+                        switch (inboundType) {
+                            case 'trojan':
+                                return {
+                                    type: inboundType,
+                                    username: tId.toString(),
+                                    password: trojanPassword,
+                                    tag: inbound.tag,
+                                };
+                            case 'vless':
+                                return {
+                                    type: inboundType,
+                                    username: tId.toString(),
+                                    uuid: vlessUuid,
+                                    flow: getVlessFlowFromDbInbound(inbound),
+                                    tag: inbound.tag,
+                                };
+                            case 'shadowsocks':
+                                return {
+                                    type: inboundType,
+                                    username: tId.toString(),
+                                    password: ssPassword,
+                                    tag: inbound.tag,
+                                    cipherType: CipherType.CHACHA20_POLY1305,
+                                    ivCheck: false,
+                                };
+                            default:
+                                throw new Error(`Unsupported inbound type: ${inboundType}`);
+                        }
+                    }),
             };
 
             for (const node of nodes) {
