@@ -36,7 +36,7 @@ interface ProxyNode {
     alterId?: number;
     cipher?: string;
     name: string;
-    network: string;
+    network?: string;
     password?: string;
     port: number;
     server: string;
