@@ -129,9 +129,21 @@ export class MihomoGeneratorService {
                     continue;
                 }
 
+                let filteredRemarks = proxyRemarks;
+
+                if (remnawaveCustom && remnawaveCustom['filter']) {
+                    const filterRegex = new RegExp(remnawaveCustom['filter']);
+                    filteredRemarks = filteredRemarks.filter((r) => filterRegex.test(r));
+                }
+
+                if (remnawaveCustom && remnawaveCustom['exclude-filter']) {
+                    const excludeRegex = new RegExp(remnawaveCustom['exclude-filter']);
+                    filteredRemarks = filteredRemarks.filter((r) => !excludeRegex.test(r));
+                }
+
                 if (remnawaveCustom && remnawaveCustom['select-random-proxy'] === true) {
                     const randomProxy =
-                        proxyRemarks[Math.floor(Math.random() * proxyRemarks.length)];
+                        filteredRemarks[Math.floor(Math.random() * filteredRemarks.length)];
 
                     if (randomProxy) {
                         group.proxies.push(randomProxy);
@@ -141,7 +153,7 @@ export class MihomoGeneratorService {
                 }
 
                 if (remnawaveCustom && remnawaveCustom['shuffle-proxies-order'] === true) {
-                    const shuffledProxies = _.shuffle(proxyRemarks);
+                    const shuffledProxies = _.shuffle(filteredRemarks);
 
                     for (const proxyRemark of shuffledProxies) {
                         group.proxies.push(proxyRemark);
@@ -151,7 +163,7 @@ export class MihomoGeneratorService {
                 }
 
                 if (Array.isArray(group.proxies)) {
-                    for (const proxyRemark of proxyRemarks) {
+                    for (const proxyRemark of filteredRemarks) {
                         group.proxies.push(proxyRemark);
                     }
                 }
