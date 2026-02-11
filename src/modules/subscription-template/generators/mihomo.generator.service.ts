@@ -144,6 +144,20 @@ export class MihomoGeneratorService {
                     filteredRemarks = filteredRemarks.filter((r) => !excludeRegex.test(r));
                 }
 
+                if (remnawaveCustom && Array.isArray(remnawaveCustom['include-type'])) {
+                    const includeTypes: string[] = remnawaveCustom['include-type'];
+                    filteredRemarks = filteredRemarks.filter((r) =>
+                        includeTypes.includes(proxyTypeMap.get(r) || ''),
+                    );
+                }
+
+                if (remnawaveCustom && Array.isArray(remnawaveCustom['exclude-type'])) {
+                    const excludeTypes: string[] = remnawaveCustom['exclude-type'];
+                    filteredRemarks = filteredRemarks.filter(
+                        (r) => !excludeTypes.includes(proxyTypeMap.get(r) || ''),
+                    );
+                }
+
                 if (remnawaveCustom && remnawaveCustom['pin-proxies']) {
                     const pinConfig = remnawaveCustom['pin-proxies'];
                     const pinKeys = Object.keys(pinConfig);
