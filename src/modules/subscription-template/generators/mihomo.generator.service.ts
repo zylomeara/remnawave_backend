@@ -112,8 +112,11 @@ export class MihomoGeneratorService {
                 }
             }
 
+            const proxyTypeMap = new Map<string, string>();
+
             for (const proxy of data.proxies) {
                 yamlConfig.proxies.push(proxy);
+                proxyTypeMap.set(proxy.name, proxy.type);
             }
 
             for (const group of yamlConfig['proxy-groups']) {
@@ -139,6 +142,43 @@ export class MihomoGeneratorService {
                 if (remnawaveCustom && remnawaveCustom['exclude-filter']) {
                     const excludeRegex = new RegExp(remnawaveCustom['exclude-filter']);
                     filteredRemarks = filteredRemarks.filter((r) => !excludeRegex.test(r));
+                }
+
+                if (remnawaveCustom && remnawaveCustom['pin-proxies']) {
+                    const pinConfig = remnawaveCustom['pin-proxies'];
+                    const pinKeys = Object.keys(pinConfig);
+
+                    filteredRemarks = [...filteredRemarks].sort((a, b) => {
+                        for (const key of pinKeys) {
+                            let aPriority: number;
+                            let bPriority: number;
+
+                            if (key === 'by-name') {
+                                const patterns = pinConfig['by-name'].map(
+                                    (p: string) => new RegExp(p),
+                                );
+                                const aIdx = patterns.findIndex((p: RegExp) => p.test(a));
+                                const bIdx = patterns.findIndex((p: RegExp) => p.test(b));
+                                aPriority = aIdx === -1 ? patterns.length : aIdx;
+                                bPriority = bIdx === -1 ? patterns.length : bIdx;
+                            } else if (key === 'by-protocol') {
+                                const typeOrder: string[] = pinConfig['by-protocol'];
+                                const aType = proxyTypeMap.get(a) || '';
+                                const bType = proxyTypeMap.get(b) || '';
+                                const aIdx = typeOrder.indexOf(aType);
+                                const bIdx = typeOrder.indexOf(bType);
+                                aPriority = aIdx === -1 ? typeOrder.length : aIdx;
+                                bPriority = bIdx === -1 ? typeOrder.length : bIdx;
+                            } else {
+                                continue;
+                            }
+
+                            if (aPriority !== bPriority) {
+                                return aPriority - bPriority;
+                            }
+                        }
+                        return 0;
+                    });
                 }
 
                 if (remnawaveCustom && remnawaveCustom['select-random-proxy'] === true) {
