@@ -1,0 +1,781 @@
+tcp-concurrent: false
+mixed-port: 7890
+allow-lan: true
+mode: rule
+log-level: warning
+external-controller: 127.0.0.1:9090
+unified-delay: true
+ipv6: false
+global-client-fingerprint: chrome
+keep-alive-idle: 30
+keep-alive-interval: 30
+geodata-mode: true
+geodata-loader: standard
+geo-auto-update: true
+geo-update-interval: 24
+
+# --- ПЕРЕМЕННЫЕ ---
+hidden_flag: &hidden false
+
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+sniffer:
+  enable: true
+  force-dns-mapping: true
+  parse-pure-ip: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+    TLS:
+      ports: [443, 3478, 5222, 8443]
+    QUIC:
+      ports: [443, 3478]
+  force-domain:
+    - +.instagram.com
+    - +.facebook.com
+    - +.fbcdn.net
+    - +.cdninstagram.com
+    - +.whatsapp.net
+    - +.whatsapp.com
+
+dns:
+  enable: true
+  enhanced-mode: fake-ip
+  hosts:
+    white-ru1.gerline.store: 51.250.111.90
+    white-ru2.gerline.store: 51.250.30.54
+    se1.gerline.store: 64.112.124.139
+    dns.gerline.store: 51.250.111.90
+    static.gerline.store: 51.250.111.90
+    cp.cloudflare.com: 1.1.1.1
+    connectivitycheck.gstatic.com: 142.250.74.99
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - "*.lan"
+    - "*.local"
+    - "+.stun.*.*"
+    - "time.*.com"
+    - "ntp.*.com"
+    - "+.pool.ntp.org"
+  default-nameserver:
+    - 77.88.8.8
+  nameserver:
+    - https://dns.gerline.store/dns-query
+  proxy-server-nameserver:
+    - 77.88.8.8
+    - 77.88.8.1
+
+
+tun:
+  enable: true
+  stack: mixed
+  mtu: 1400
+  dns-hijack:
+    - 0.0.0.0:53
+  auto-route: true
+  auto-detect-interface: true
+  inet4-address:
+    - 198.18.0.1/16
+  route-exclude:
+    - 1.1.1.1/32
+    - 51.250.111.90/32
+    - 51.250.30.54/32
+    - 64.112.124.139/32
+    - 213.171.30.158/32
+    - 91.224.87.36/32
+    - 209.97.137.88/32
+    - 85.92.108.138/32
+    - 104.194.149.32/32
+
+
+# --- НАСТРОЙКИ GEO-ДАННЫХ ---
+geox-url:
+  geosite: https://static.gerline.store/geo/release/geosite.dat
+  geoip: https://static.gerline.store/geo/release/geoip.dat
+
+proxies: # LEAVE THIS LINE!
+
+proxy-groups:
+
+  # ========== СЕРВИСЫ ==========
+  - name: 'RU сайты'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - SAFE_DIRECT
+      - 🇷🇺 RU Servers
+      - 🚀 Auto Select
+      - 🌍 Abroad Servers
+    icon: "https://www.svgrepo.com/show/508628/flag-ru.svg"
+
+  - name: 'Остальные сайты'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🇷🇺 RU Servers
+      - SAFE_DIRECT
+      - 🚀 Auto Select
+      - 🌍 Abroad Servers
+    icon: "https://www.svgrepo.com/show/293111/maps-and-flags-global.svg"
+
+  - name: 'YouTube'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 📺 YouTube с рекламой
+      - 🛡️ YouTube без рекламы
+      - SAFE_DIRECT
+    icon: "https://www.svgrepo.com/show/13671/youtube.svg"
+
+  - name: '2IP.IO'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🌍 Abroad Servers
+      - 🚀 Auto Select
+      - 🇷🇺 RU Servers
+      - SAFE_DIRECT
+    icon: "https://www.svgrepo.com/show/415672/address-location-map.svg"
+
+  - name: 'Discord'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🚀 Auto Select
+      - 🌍 Abroad Servers
+      - 🇷🇺 RU Servers
+      - SAFE_DIRECT
+    icon: "https://www.svgrepo.com/show/331368/discord-v2.svg"
+
+  - name: 'AI'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🌍 Abroad Servers
+      - 🚀 Auto Select
+      - 🇷🇺 RU Servers
+      - SAFE_DIRECT
+    icon: "https://www.svgrepo.com/show/306500/openai.svg"
+
+  - name: 'Meta'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🌍 Abroad Servers
+      - 🚀 Auto Select
+      - 🇷🇺 RU Servers
+      - SAFE_DIRECT
+    icon: "https://www.svgrepo.com/show/424909/meta-logo-facebook-2.svg"
+
+  - name: 'Telegram'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🚀 Auto Select
+      - 🌍 Abroad Servers
+      - 🇷🇺 RU Servers
+      - SAFE_DIRECT
+    icon: "https://www.svgrepo.com/show/354443/telegram.svg"
+
+  - name: 'Spotify'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🌍 Abroad Servers
+      - 🇷🇺 RU Servers
+      - 🚀 Auto Select
+      - SAFE_DIRECT
+    icon: "https://www.svgrepo.com/show/349511/spotify.svg"
+
+  - name: 'Netflix'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🌍 Abroad Servers
+      - 🚀 Auto Select
+      - 🇷🇺 RU Servers
+      - SAFE_DIRECT
+    icon: "https://www.svgrepo.com/show/303341/netflix-1-logo.svg"
+
+  - name: 'Notion'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🌍 Abroad Servers
+      - 🚀 Auto Select
+      - 🇷🇺 RU Servers
+      - SAFE_DIRECT
+    icon: "https://www.svgrepo.com/show/361558/notion-logo.svg"
+
+  - name: 'Apple'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - SAFE_DIRECT
+      - 🚀 Auto Select
+      - 🌍 Abroad Servers
+      - 🇷🇺 RU Servers
+    icon: "https://www.svgrepo.com/show/501448/apple.svg"
+
+  - name: 'Google'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - SAFE_DIRECT
+      - 🚀 Auto Select
+      - 🌍 Abroad Servers
+      - 🇷🇺 RU Servers
+    icon: "https://www.svgrepo.com/show/475656/google-color.svg"
+
+  - name: 'Google Play'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - SAFE_DIRECT
+      - 🚀 Auto Select
+      - 🌍 Abroad Servers
+      - 🇷🇺 RU Servers
+    icon: "https://www.svgrepo.com/show/353828/google-play-icon.svg"
+
+  - name: 'TikTok'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🌍 Abroad Servers
+      - 🚀 Auto Select
+      - 🇷🇺 RU Servers
+      - SAFE_DIRECT
+    icon: "https://www.svgrepo.com/show/349530/tiktok.svg"
+
+  - name: 'Dev'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🚀 Auto Select
+      - 🌍 Abroad Servers
+      - 🇷🇺 RU Servers
+      - SAFE_DIRECT
+    icon: "https://www.svgrepo.com/show/344880/github.svg"
+
+  - name: 'Canva'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🌍 Abroad Servers
+      - 🚀 Auto Select
+      - 🇷🇺 RU Servers
+      - SAFE_DIRECT
+    icon: "https://cdn-icons-png.flaticon.com/128/9302/9302141.png"
+
+  - name: 'Speedtest'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - SAFE_DIRECT
+      - 🚀 Auto Select
+      - 🌍 Abroad Servers
+      - 🇷🇺 RU Servers
+    icon: "https://www.svgrepo.com/show/355484/speed.svg"
+
+  - name: 'Linkedin'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🌍 Abroad Servers
+      - 🚀 Auto Select
+      - 🇷🇺 RU Servers
+      - SAFE_DIRECT
+    icon: "https://www.svgrepo.com/show/448234/linkedin.svg"
+
+  - name: 'Microsoft'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🌍 Abroad Servers
+      - 🚀 Auto Select
+      - 🇷🇺 RU Servers
+      - SAFE_DIRECT
+    icon: "https://www.svgrepo.com/show/452062/microsoft.svg"
+
+  - name: 'Steam'
+    type: select
+    remnawave:
+      include-proxies: false
+    proxies:
+      - SAFE_DIRECT
+      - 🚀 Auto Select
+      - 🌍 Abroad Servers
+      - 🇷🇺 RU Servers
+    icon: "https://www.svgrepo.com/show/452107/steam.svg"
+
+  # ========== ВНУТРЕННИЕ URL-TEST ГРУППЫ ==========
+
+  - name: '🌍 Abroad Servers (url-test)'
+    type: url-test
+    tolerance: 150
+    url: https://health.gerline.store/health
+    interval: 30
+    timeout: 2000
+    lazy: true
+    proxies:
+      - 🌍 Abroad Servers (fastest ss connection)
+    # LEAVE THIS LINE!
+    remnawave:
+      exclude-filter: '⚠️|🛡️|🇷🇺|🔒|🛜|📶|ShadowSocks'
+
+  - name: '🚀 Auto Select (url-test)'
+    type: url-test
+    tolerance: 150
+    url: https://cp.cloudflare.com/generate_204
+    expected-status: 204
+    interval: 300
+    timeout: 3000
+    lazy: true
+    proxies:
+    # LEAVE THIS LINE!
+    remnawave:
+      exclude-filter: '⚠️|🛡️|🔒|🛜|📶'
+
+  - name: '🇷🇺 RU Servers (url-test)'
+    type: url-test
+    tolerance: 150
+    url: https://cp.cloudflare.com/generate_204
+    expected-status: 204
+    interval: 300
+    timeout: 3000
+    lazy: true
+    proxies:
+    # LEAVE THIS LINE!
+    remnawave:
+      filter: '🇷🇺'
+      exclude-filter: '⚠️|🛡️|🔒|🛜|📶'
+
+  # ========== БАЗОВЫЕ ГРУППЫ ==========
+
+  - name: '📶 Мобильный интернет'
+    type: fallback
+    url: https://cp.cloudflare.com/generate_204
+    expected-status: 204
+    interval: 30
+    timeout: 5000
+    tolerance: 200
+    max-failed-times: 5
+    lazy: false
+    proxies:
+    # LEAVE THIS LINE!
+    remnawave:
+      filter: '📶'
+
+  # ========== FALLBACK ОБЁРТКИ ==========
+
+  - name: '🚀 Auto Select'
+    type: fallback
+    url: https://cp.cloudflare.com/generate_204
+    expected-status: 204
+    hidden: *hidden
+    interval: 30
+    timeout: 2000
+    lazy: false
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🚀 Auto Select (url-test)
+      - 📶 Мобильный интернет
+
+  - name: '🇷🇺 RU Servers'
+    type: fallback
+    url: https://cp.cloudflare.com/generate_204
+    expected-status: 204
+    hidden: *hidden
+    interval: 30
+    timeout: 2000
+    lazy: false
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🇷🇺 RU Servers (url-test)
+      - 📶 Мобильный интернет
+
+  - name: '🌍 Abroad Servers'
+    type: fallback
+    url: https://cp.cloudflare.com/generate_204
+    expected-status: 204
+    hidden: *hidden
+    interval: 30
+    timeout: 2000
+    lazy: false
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🌍 Abroad Servers (url-test)
+      - 🇷🇺 RU Servers (url-test)
+      - 📶 Мобильный интернет
+
+  # ========== Служебные группы ==========
+
+  - name: '🌍 Abroad Servers (fastest ss connection)'
+    type: url-test
+    url: https://health.gerline.store/health
+    interval: 30
+    timeout: 3000
+    tolerance: 30
+    hidden: *hidden
+    lazy: false
+    proxies:
+    # LEAVE THIS LINE!
+    remnawave:
+      include-type:
+        - ss
+      exclude-filter: '🇷🇺|🔒|🛜|📶'
+
+  - name: '🛡️ YT No Ads - Auto'
+    hidden: *hidden
+    type: url-test
+    url: https://cp.cloudflare.com/generate_204
+    interval: 30
+    timeout: 2000
+    proxies:
+    # LEAVE THIS LINE!
+    remnawave:
+      filter: '🇷🇺.*🛡️|🛡️.*🇷🇺'
+
+  - name: '🛡️ YouTube без рекламы'
+    hidden: *hidden
+    type: fallback
+    url: https://cp.cloudflare.com/generate_204
+    interval: 30
+    timeout: 2000
+    remnawave:
+      include-proxies: false
+    proxies:
+      - '🛡️ YT No Ads - Auto'
+      - SAFE_DIRECT
+
+  - name: '📺 YouTube с рекламой'
+    type: select
+    hidden: *hidden
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 🌍 Abroad Servers
+      - 🚀 Auto Select
+      - 🇷🇺 RU Servers
+      - SAFE_DIRECT
+
+  - name: 'SAFE_DIRECT'
+    type: url-test
+    url: https://connectivitycheck.gstatic.com/generate_204
+    expected-status: 204
+    interval: 15
+    timeout: 7000
+    lazy: false
+    max-failed-times: 2
+    remnawave:
+      include-proxies: false
+    proxies:
+      - 📶 Мобильный интернет
+      - DIRECT
+
+# --- ПРОВАЙДЕРЫ ПРАВИЛ ---
+rule-providers:
+  # ── Whitelist (live proxy → hxehex) ──
+  ru-whitelist:
+    type: http
+    behavior: domain
+    url: https://static.gerline.store/whitelist/whitelist.txt
+    path: ./ruleset/ru-whitelist.txt
+    interval: 86400
+  ru-whitelist-ip:
+    type: http
+    behavior: ipcidr
+    url: https://static.gerline.store/whitelist/cidrwhitelist.txt
+    path: ./ruleset/ru-whitelist-ip.txt
+    interval: 86400
+
+  # ── Discord (inline) ──
+  discord:
+    type: inline
+    behavior: classical
+    format: text
+    payload:
+      - AND,((DOMAIN-KEYWORD,discord),(NOT,((DOMAIN-SUFFIX,ru))))
+      - AND,((IP-CIDR,34.0.192.0/18,no-resolve),(NETWORK,UDP),(DST-PORT,50000-50100))
+      - AND,((IP-CIDR,35.192.0.0/11,no-resolve),(NETWORK,UDP),(DST-PORT,50000-50100))
+      - AND,((IP-CIDR,66.22.192.0/18,no-resolve),(NETWORK,UDP),(DST-PORT,50000-50100))
+
+  # ── GeoSite: domain, .mrs (live proxy → MetaCubeX meta branch) ──
+  geosite-category-ru:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/category-ru.mrs
+    path: ./ruleset/geosite/category-ru.mrs
+    interval: 86400
+  geosite-microsoft:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/microsoft.mrs
+    path: ./ruleset/geosite/microsoft.mrs
+    interval: 86400
+  geosite-category-dev:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/category-dev.mrs
+    path: ./ruleset/geosite/category-dev.mrs
+    interval: 86400
+  geosite-digitalocean:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/digitalocean.mrs
+    path: ./ruleset/geosite/digitalocean.mrs
+    interval: 86400
+  geosite-canva:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/canva.mrs
+    path: ./ruleset/geosite/canva.mrs
+    interval: 86400
+  geosite-category-ai:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/category-ai-!cn.mrs
+    path: ./ruleset/geosite/category-ai-!cn.mrs
+    interval: 86400
+  geosite-discord:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/discord.mrs
+    path: ./ruleset/geosite/discord.mrs
+    interval: 86400
+  geosite-linkedin:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/linkedin.mrs
+    path: ./ruleset/geosite/linkedin.mrs
+    interval: 86400
+  geosite-netflix:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/netflix.mrs
+    path: ./ruleset/geosite/netflix.mrs
+    interval: 86400
+  geosite-spotify:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/spotify.mrs
+    path: ./ruleset/geosite/spotify.mrs
+    interval: 86400
+  geosite-category-speedtest:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/category-speedtest.mrs
+    path: ./ruleset/geosite/category-speedtest.mrs
+    interval: 86400
+  geosite-steam:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/steam.mrs
+    path: ./ruleset/geosite/steam.mrs
+    interval: 86400
+  geosite-apple:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/apple.mrs
+    path: ./ruleset/geosite/apple.mrs
+    interval: 86400
+  geosite-youtube:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/youtube.mrs
+    path: ./ruleset/geosite/youtube.mrs
+    interval: 86400
+  geosite-tiktok:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/tiktok.mrs
+    path: ./ruleset/geosite/tiktok.mrs
+    interval: 86400
+  geosite-notion:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/notion.mrs
+    path: ./ruleset/geosite/notion.mrs
+    interval: 86400
+  geosite-google-play:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/google-play.mrs
+    path: ./ruleset/geosite/google-play.mrs
+    interval: 86400
+  geosite-google:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/google.mrs
+    path: ./ruleset/geosite/google.mrs
+    interval: 86400
+  geosite-telegram:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/telegram.mrs
+    path: ./ruleset/geosite/telegram.mrs
+    interval: 86400
+  geosite-whatsapp:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/whatsapp.mrs
+    path: ./ruleset/geosite/whatsapp.mrs
+    interval: 86400
+  geosite-meta:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/meta.mrs
+    path: ./ruleset/geosite/meta.mrs
+    interval: 86400
+  geosite-amazon:
+    type: http
+    behavior: domain
+    format: mrs
+    url: https://static.gerline.store/geo/geosite/amazon.mrs
+    path: ./ruleset/geosite/amazon.mrs
+    interval: 86400
+
+  # ── GeoIP: ipcidr, .mrs (live proxy → MetaCubeX meta branch) ──
+  geoip-private:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://static.gerline.store/geo/geoip/private.mrs
+    path: ./ruleset/geoip/private.mrs
+    interval: 86400
+  geoip-ru:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://static.gerline.store/geo/geoip/ru.mrs
+    path: ./ruleset/geoip/ru.mrs
+    interval: 86400
+  geoip-netflix:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://static.gerline.store/geo/geoip/netflix.mrs
+    path: ./ruleset/geoip/netflix.mrs
+    interval: 86400
+  geoip-telegram:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://static.gerline.store/geo/geoip/telegram.mrs
+    path: ./ruleset/geoip/telegram.mrs
+    interval: 86400
+  geoip-facebook:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: https://static.gerline.store/geo/geoip/facebook.mrs
+    path: ./ruleset/geoip/facebook.mrs
+    interval: 86400
+
+  # ── Amazon IP (cron → диск, release-only) ──
+  amazon-ip:
+    type: http
+    format: mrs
+    behavior: ipcidr
+    url: https://static.gerline.store/releases/amazon-ip.mrs
+    path: ./ruleset/amazon-ip.mrs
+    interval: 86400
+
+
+# --- ПРАВИЛА МАРШРУТИЗАЦИИ ---
+rules:
+  # Блок QUIC
+  - AND,((NETWORK,udp),(DST-PORT,443)),REJECT
+  # Приватные сети
+  - RULE-SET,geoip-private,DIRECT,no-resolve
+  # Российские сайты
+  - DOMAIN-SUFFIX,sberbank.ru,RU сайты
+  - DOMAIN-SUFFIX,reddit.com,RU сайты
+  - DOMAIN-SUFFIX,mail.rwb.ru,DIRECT
+  - RULE-SET,ru-whitelist,DIRECT
+  - RULE-SET,ru-whitelist-ip,DIRECT
+  - RULE-SET,geosite-category-ru,RU сайты
+  - DOMAIN-SUFFIX,ru,RU сайты
+  - DOMAIN-SUFFIX,by,RU сайты
+  - DOMAIN-SUFFIX,xn--p1ai,RU сайты
+  - DOMAIN-SUFFIX,yandex-pogoda.static-storage.net,RU сайты
+  - RULE-SET,geoip-ru,RU сайты,no-resolve
+  # AI
+  - RULE-SET,geosite-category-ai,AI
+  # Сервисы
+  - RULE-SET,discord,Discord
+  - RULE-SET,geosite-discord,Discord
+  - RULE-SET,geosite-linkedin,Linkedin
+  - RULE-SET,geosite-netflix,Netflix
+  - RULE-SET,geoip-netflix,Netflix,no-resolve
+  - RULE-SET,geosite-spotify,Spotify
+  - RULE-SET,geosite-category-speedtest,Speedtest
+  - RULE-SET,geosite-steam,Steam
+  - RULE-SET,geosite-microsoft,Microsoft
+  - RULE-SET,geosite-apple,Apple
+  - RULE-SET,geosite-youtube,YouTube
+  - RULE-SET,geosite-tiktok,TikTok
+  - RULE-SET,geosite-notion,Notion
+  - RULE-SET,geosite-google-play,Google Play
+  - RULE-SET,geosite-google,Google
+  - RULE-SET,geosite-category-dev,Dev
+  - RULE-SET,geosite-digitalocean,Dev
+  - DOMAIN-SUFFIX,amplitude.com,Dev
+  - RULE-SET,geosite-canva,Canva
+  - RULE-SET,geosite-telegram,Telegram
+  - RULE-SET,geoip-telegram,Telegram,no-resolve
+  # Meta
+  - RULE-SET,geosite-whatsapp,Meta
+  - RULE-SET,geosite-meta,Meta
+  - RULE-SET,geoip-facebook,Meta,no-resolve
+  - RULE-SET,geosite-amazon,Meta
+  - RULE-SET,amazon-ip,Meta,no-resolve
+  # Прочее
+  - DOMAIN-SUFFIX,2ip.io,2IP.IO
+  - MATCH,Остальные сайты
