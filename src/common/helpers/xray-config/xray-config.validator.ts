@@ -85,6 +85,7 @@ export class XRayConfig {
                 ![
                     'dokodemo-door',
                     'http',
+                    'hysteria',
                     'hysteria2',
                     'mixed',
                     'shadowsocks',
@@ -94,11 +95,11 @@ export class XRayConfig {
                 ].includes(inbound.protocol)
             ) {
                 throw new Error(
-                    `Invalid protocol in inbound "${inbound.tag}". Allowed values are: shadowsocks, trojan, vless, hysteria2, dokodemo-door, http, mixed, wireguard`,
+                    `Invalid protocol in inbound "${inbound.tag}". Allowed values are: shadowsocks, trojan, vless, hysteria, hysteria2, dokodemo-door, http, mixed, wireguard`,
                 );
             }
 
-            if (!this.isExternalProtocol(inbound.protocol)) {
+            if (!this.isExternalProtocol(inbound.protocol) && inbound.protocol !== 'hysteria') {
                 const network = inbound.streamSettings?.network;
 
                 if (
@@ -376,6 +377,7 @@ export class XRayConfig {
                     });
                 }
                 break;
+            case 'hysteria':
             case 'hysteria2':
                 break;
             default:

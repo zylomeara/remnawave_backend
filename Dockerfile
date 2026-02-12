@@ -15,7 +15,7 @@ RUN apk add --no-cache curl unzip ca-certificates \
 FROM node:24.13-alpine AS backend-build
 WORKDIR /opt/app
 
-# RUN apk add python3 python3-dev build-base pkgconfig libunwind-dev
+RUN apk add python3 python3-dev build-base pkgconfig libunwind-dev
 
 ENV PRISMA_CLI_BINARY_TARGETS=linux-musl-openssl-3.0.x,linux-musl-arm64-openssl-3.0.x
 
