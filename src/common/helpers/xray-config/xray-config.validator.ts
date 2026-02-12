@@ -85,7 +85,6 @@ export class XRayConfig {
                 ![
                     'dokodemo-door',
                     'http',
-                    'hysteria',
                     'hysteria2',
                     'mixed',
                     'shadowsocks',
@@ -95,16 +94,16 @@ export class XRayConfig {
                 ].includes(inbound.protocol)
             ) {
                 throw new Error(
-                    `Invalid protocol in inbound "${inbound.tag}". Allowed values are: shadowsocks, trojan, vless, hysteria, hysteria2, dokodemo-door, http, mixed, wireguard`,
+                    `Invalid protocol in inbound "${inbound.tag}". Allowed values are: shadowsocks, trojan, vless, hysteria2, dokodemo-door, http, mixed, wireguard.`,
                 );
             }
 
-            if (!this.isExternalProtocol(inbound.protocol) && inbound.protocol !== 'hysteria') {
+            if (!this.isExternalProtocol(inbound.protocol)) {
                 const network = inbound.streamSettings?.network;
 
                 if (
                     network &&
-                    !['grpc', 'httpupgrade', 'raw', 'tcp', 'ws', 'xhttp'].includes(network)
+                    !['grpc', 'httpupgrade', 'hysteria2', 'raw', 'tcp', 'ws', 'xhttp'].includes(network)
                 ) {
                     throw new Error(
                         `Invalid network type "${network}" in inbound "${inbound.tag}". Allowed values are: raw (or tcp), ws, httpupgrade, xhttp and grpc`,
@@ -377,7 +376,6 @@ export class XRayConfig {
                     });
                 }
                 break;
-            case 'hysteria':
             case 'hysteria2':
                 break;
             default:
@@ -500,8 +498,8 @@ export class XRayConfig {
         return !['dokodemo-door', 'http', 'mixed', 'wireguard'].includes(protocol);
     }
 
-    private isExternalProtocol(protocol: string): boolean {
-        return ['hysteria2'].includes(protocol);
+    private isExternalProtocol(_protocol: string): boolean {
+        return false;
     }
 
     public replaceSnippets(snippets: Map<string, unknown>): void {
