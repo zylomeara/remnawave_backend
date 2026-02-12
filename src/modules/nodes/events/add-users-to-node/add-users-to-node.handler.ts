@@ -56,9 +56,7 @@ export class AddUsersToNodeHandler implements IEventHandler<AddUsersToNodeEvent>
 
                     if (inbounds.length === 0) continue;
 
-                    const filteredInbounds = inbounds.filter(
-                        (ib) => activeTags.has(ib.tag) && ib.type !== 'hysteria2',
-                    );
+                    const filteredInbounds = inbounds.filter((ib) => activeTags.has(ib.tag));
 
                     if (filteredInbounds.length === 0) {
                         usersToRemove.push({ userId: tId.toString(), hashUuid: vlessUuid });
@@ -84,6 +82,8 @@ export class AddUsersToNodeHandler implements IEventHandler<AddUsersToNodeEvent>
                                         flow: getVlessFlowFromDbInbound(inbound),
                                     };
                                 case 'shadowsocks':
+                                    return { type: inbound.type, tag: inbound.tag };
+                                case 'hysteria2':
                                     return { type: inbound.type, tag: inbound.tag };
                                 default:
                                     throw new Error(`Unsupported inbound type: ${inbound.type}`);
