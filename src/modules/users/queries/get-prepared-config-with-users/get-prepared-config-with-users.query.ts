@@ -1,6 +1,6 @@
 import { Query } from '@nestjs/cqrs';
 
-import { StartXrayCommand } from '@remnawave/node-contract';
+import { StartXrayCommand } from '@zmrw/node-contract';
 
 import { IXrayConfig } from '@common/helpers/xray-config/interfaces';
 import { TResult } from '@common/types';

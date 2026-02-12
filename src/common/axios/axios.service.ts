@@ -18,7 +18,7 @@ import {
     RemoveUsersCommand,
     StartXrayCommand,
     StopXrayCommand,
-} from '@remnawave/node-contract';
+} from '@zmrw/node-contract';
 
 import { formatExecutionTime, getTime } from '@common/utils/get-elapsed-time';
 import { prettyBytesUtil } from '@common/utils/bytes';

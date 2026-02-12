@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { CommandBus } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 
-import { GetUsersStatsCommand } from '@remnawave/node-contract';
+import { GetUsersStatsCommand } from '@zmrw/node-contract';
 
 import { fromNanoToNumber } from '@common/utils/nano';
 import { AxiosService } from '@common/axios';

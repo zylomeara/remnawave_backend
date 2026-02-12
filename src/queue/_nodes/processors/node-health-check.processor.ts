@@ -5,7 +5,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CommandBus } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 
-import { GetSystemStatsCommand } from '@remnawave/node-contract';
+import { GetSystemStatsCommand } from '@zmrw/node-contract';
 
 import { AxiosService } from '@common/axios';
 import { EVENTS } from '@libs/contracts/constants';
