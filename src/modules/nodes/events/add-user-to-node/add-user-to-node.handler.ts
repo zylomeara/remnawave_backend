@@ -120,13 +120,26 @@ export class AddUserToNodeHandler implements IEventHandler<AddUserToNodeEvent> {
                     continue;
                 }
 
-                await this.nodesQueuesService.addUserToNode({
-                    data: filteredData,
-                    node: {
-                        address: node.address,
-                        port: node.port,
-                    },
-                });
+                const mainProtocols = filteredData.data.filter(
+                    (item) => item.type !== 'hysteria2',
+                );
+                const hy2Protocols = filteredData.data.filter(
+                    (item) => item.type === 'hysteria2',
+                );
+
+                if (mainProtocols.length > 0) {
+                    await this.nodesQueuesService.addUserToNode({
+                        data: { ...filteredData, data: mainProtocols },
+                        node: { address: node.address, port: node.port },
+                    });
+                }
+
+                if (hy2Protocols.length > 0) {
+                    await this.nodesQueuesService.addUserToNode({
+                        data: { ...filteredData, data: hy2Protocols },
+                        node: { address: node.address, port: node.port },
+                    });
+                }
             }
 
             return;
