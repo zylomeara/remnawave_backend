@@ -95,13 +95,44 @@ export class AddUsersToNodeHandler implements IEventHandler<AddUsersToNodeEvent>
                 if (usersForNode.length > 0) {
                     const affectedInboundTags = [...activeTags];
 
-                    await this.nodesQueuesService.addUsersToNode({
-                        data: {
-                            affectedInboundTags,
-                            users: usersForNode,
-                        },
-                        node: { address: node.address, port: node.port },
-                    });
+                    const usersMain: typeof usersForNode = [];
+                    const usersHy2: typeof usersForNode = [];
+
+                    for (const userEntry of usersForNode) {
+                        const mainInbounds = userEntry.inboundData.filter(
+                            (ib) => ib.type !== 'hysteria2',
+                        );
+                        const hy2Inbounds = userEntry.inboundData.filter(
+                            (ib) => ib.type === 'hysteria2',
+                        );
+
+                        if (mainInbounds.length > 0) {
+                            usersMain.push({ ...userEntry, inboundData: mainInbounds });
+                        }
+                        if (hy2Inbounds.length > 0) {
+                            usersHy2.push({ ...userEntry, inboundData: hy2Inbounds });
+                        }
+                    }
+
+                    if (usersMain.length > 0) {
+                        await this.nodesQueuesService.addUsersToNode({
+                            data: {
+                                affectedInboundTags,
+                                users: usersMain,
+                            },
+                            node: { address: node.address, port: node.port },
+                        });
+                    }
+
+                    if (usersHy2.length > 0) {
+                        await this.nodesQueuesService.addUsersToNode({
+                            data: {
+                                affectedInboundTags,
+                                users: usersHy2,
+                            },
+                            node: { address: node.address, port: node.port },
+                        });
+                    }
                 }
 
                 if (usersToRemove.length > 0) {
