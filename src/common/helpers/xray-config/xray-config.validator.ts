@@ -377,6 +377,14 @@ export class XRayConfig {
                 }
                 break;
             case 'hysteria2':
+                (inbound.settings as TrojanSettings).clients ??= [];
+                for (const user of users) {
+                    (inbound.settings as TrojanSettings).clients.push({
+                        password: user.trojanPassword,
+                        email: user.tId.toString(),
+                        id: user.vlessUuid,
+                    });
+                }
                 break;
             default:
                 throw new Error(`Protocol ${inbound.protocol} is not supported.`);
