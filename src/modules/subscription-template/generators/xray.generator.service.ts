@@ -104,6 +104,8 @@ export class XrayGeneratorService {
                     method: 'chacha20-ietf-poly1305',
                     password: host.password.ssPassword,
                 });
+            case 'hysteria2':
+                return this.hysteria2(host);
             default:
                 return undefined;
         }
@@ -271,6 +273,24 @@ export class XrayGeneratorService {
         const encodedRemark = encodeURIComponent(params.remark);
 
         return `ss://${base64Credentials}@${params.address}:${params.port}#${encodedRemark}`;
+    }
+
+    private hysteria2(params: IFormattedHost): string {
+        const payload: Record<string, unknown> = {};
+
+        if (params.sni) {
+            payload.sni = params.sni;
+        }
+
+        if (params.allowInsecure) {
+            payload.insecure = 1;
+        }
+
+        const stringPayload = this.convertPayloadToString(payload);
+        const queryString = new URLSearchParams(stringPayload).toString();
+        const query = queryString ? `?${queryString}` : '';
+
+        return `hy2://${encodeURIComponent(params.password.trojanPassword)}@${params.address}:${params.port}${query}#${encodeURIComponent(params.remark)}`;
     }
 
     private convertPayloadToString(payload: Record<string, unknown>): Record<string, string> {
