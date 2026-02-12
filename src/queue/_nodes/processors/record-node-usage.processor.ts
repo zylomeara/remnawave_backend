@@ -5,7 +5,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { Inject, Logger } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 
-import { GetCombinedStatsCommand } from '@remnawave/node-contract';
+import { GetCombinedStatsCommand } from '@zmrw/node-contract';
 
 import { MESSAGING_NAMES, MICROSERVICES_NAMES } from '@common/microservices';
 import { AxiosService } from '@common/axios';

@@ -1,4 +1,4 @@
-import { RemoveUsersCommand } from '@remnawave/node-contract';
+import { RemoveUsersCommand } from '@zmrw/node-contract';
 
 export interface IRemoveUsersFromNodePayload {
     data: RemoveUsersCommand.Request;

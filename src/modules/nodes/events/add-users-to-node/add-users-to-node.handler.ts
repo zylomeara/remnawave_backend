@@ -2,7 +2,7 @@ import { IEventHandler, QueryBus } from '@nestjs/cqrs';
 import { EventsHandler } from '@nestjs/cqrs';
 import { Logger } from '@nestjs/common';
 
-import { AddUsersCommand as AddUsersToNodeCommandSdk } from '@remnawave/node-contract';
+import { AddUsersCommand as AddUsersToNodeCommandSdk } from '@zmrw/node-contract';
 
 import { getVlessFlowFromDbInbound } from '@common/utils/flow/get-vless-flow';
 

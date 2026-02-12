@@ -1,4 +1,4 @@
-import { AddUsersCommand as AddUsersToNodeCommandSdk } from '@remnawave/node-contract';
+import { AddUsersCommand as AddUsersToNodeCommandSdk } from '@zmrw/node-contract';
 
 export interface IAddUsersToNodePayload {
     data: AddUsersToNodeCommandSdk.Request;
