@@ -181,7 +181,7 @@ export class FormatHostsService {
                 address = address.replace('*', this.nanoid()).trim();
             }
 
-            if (inbound.protocol === 'hysteria2') {
+            if (inbound.protocol === 'hysteria2' || inbound.protocol === 'hysteria') {
                 let sni = inputHost.sni || '';
                 if (!sni && this.domainRegex.test(address)) {
                     sni = address;
