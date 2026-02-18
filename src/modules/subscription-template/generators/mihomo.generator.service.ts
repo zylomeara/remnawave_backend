@@ -158,6 +158,10 @@ export class MihomoGeneratorService {
                     );
                 }
 
+                if (remnawaveCustom && remnawaveCustom['shuffle-proxies-order'] === true) {
+                    filteredRemarks = _.shuffle(filteredRemarks);
+                }
+
                 if (remnawaveCustom && remnawaveCustom['pin-proxies']) {
                     const pinConfig = remnawaveCustom['pin-proxies'];
                     const pinKeys = Object.keys(pinConfig);
@@ -201,16 +205,6 @@ export class MihomoGeneratorService {
 
                     if (randomProxy) {
                         group.proxies.push(randomProxy);
-                    }
-
-                    continue;
-                }
-
-                if (remnawaveCustom && remnawaveCustom['shuffle-proxies-order'] === true) {
-                    const shuffledProxies = _.shuffle(filteredRemarks);
-
-                    for (const proxyRemark of shuffledProxies) {
-                        group.proxies.push(proxyRemark);
                     }
 
                     continue;
