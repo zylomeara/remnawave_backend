@@ -182,7 +182,21 @@ export class FormatHostsService {
             }
 
             if (inbound.protocol === 'hysteria2') {
-                let sni = inputHost.sni || '';
+                const tlsSettings = inbound.streamSettings?.tlsSettings;
+                const sniFromConfig = tlsSettings?.serverName || '';
+                const fingerprintFromConfig = tlsSettings?.fingerprint || '';
+                const allowInsecureFromConfig = tlsSettings?.allowInsecure ?? false;
+
+                let alpnFromConfig = '';
+                if (tlsSettings?.alpn) {
+                    if (Array.isArray(tlsSettings.alpn)) {
+                        alpnFromConfig = tlsSettings.alpn.join(',');
+                    } else if (typeof tlsSettings.alpn === 'string') {
+                        alpnFromConfig = tlsSettings.alpn;
+                    }
+                }
+
+                let sni = inputHost.sni || sniFromConfig;
                 if (!sni && this.domainRegex.test(address)) {
                     sni = address;
                 }
@@ -221,9 +235,9 @@ export class FormatHostsService {
                     host: '',
                     tls: 'tls',
                     sni,
-                    alpn: inputHost.alpn || '',
+                    alpn: inputHost.alpn || alpnFromConfig || '',
                     publicKey: '',
-                    fingerprint: inputHost.fingerprint || '',
+                    fingerprint: inputHost.fingerprint || fingerprintFromConfig || '',
                     shortId: '',
                     spiderX: '',
                     password: {
@@ -232,7 +246,7 @@ export class FormatHostsService {
                         ssPassword: user.ssPassword,
                     },
                     serverDescription,
-                    allowInsecure: inputHost.allowInsecure,
+                    allowInsecure: inputHost.allowInsecure || allowInsecureFromConfig,
                     dbData,
                     xrayJsonTemplate: inputHost.xrayJsonTemplate,
                 });
