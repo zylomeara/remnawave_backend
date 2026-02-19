@@ -186,12 +186,36 @@ export class XrayJsonGeneratorService {
                     ],
                 };
 
+            case 'hysteria2':
+                return {
+                    servers: [
+                        {
+                            address: host.address,
+                            port: host.port,
+                            password: host.password.trojanPassword,
+                        },
+                    ],
+                };
+
             default:
                 return { vnext: [] };
         }
     }
 
     private createStreamSettings(host: IFormattedHost): StreamSettings {
+        if (host.protocol === 'hysteria2') {
+            const streamSettings: StreamSettings = {
+                network: 'hysteria2',
+            };
+
+            if (host.tls === 'tls') {
+                streamSettings.security = 'tls';
+                streamSettings.tlsSettings = this.createTlsSettings(host);
+            }
+
+            return streamSettings;
+        }
+
         const streamSettings: StreamSettings = {
             network: host.network || 'tcp',
         };
