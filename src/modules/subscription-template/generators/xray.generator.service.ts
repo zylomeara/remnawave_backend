@@ -276,10 +276,16 @@ export class XrayGeneratorService {
     }
 
     private hysteria2(params: IFormattedHost): string {
-        const payload: Record<string, unknown> = {};
+        const payload: Record<string, unknown> = {
+            security: 'tls',
+        };
 
         if (params.sni) {
             payload.sni = params.sni;
+        }
+
+        if (params.alpn) {
+            payload.alpn = params.alpn;
         }
 
         if (params.allowInsecure) {
@@ -290,7 +296,7 @@ export class XrayGeneratorService {
         const queryString = new URLSearchParams(stringPayload).toString();
         const query = queryString ? `?${queryString}` : '';
 
-        return `hy2://${encodeURIComponent(params.password.trojanPassword)}@${params.address}:${params.port}${query}#${encodeURIComponent(params.remark)}`;
+        return `hysteria2://${encodeURIComponent(params.password.trojanPassword)}@${params.address}:${params.port}${query}#${encodeURIComponent(params.remark)}`;
     }
 
     private convertPayloadToString(payload: Record<string, unknown>): Record<string, string> {
