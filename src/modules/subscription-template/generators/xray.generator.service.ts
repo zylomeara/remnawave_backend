@@ -301,8 +301,7 @@ export class XrayGeneratorService {
         // fake SNI to DPI, or pin the cert by hash (pcs) when there is no real domain.
         if (params.verifyPeerCertByName) {
             payload.pcn = params.verifyPeerCertByName;
-        }
-        if (params.pinnedPeerCertSha256) {
+        } else if (params.pinnedPeerCertSha256) {
             payload.pcs = params.pinnedPeerCertSha256;
         }
 

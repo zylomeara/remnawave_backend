@@ -543,6 +543,13 @@ export class MihomoGeneratorService {
             node['obfs-password'] = host.obfsPassword;
         }
 
+        // Fake-SNI: Mihomo has no verify-by-name, so pin the server cert by its
+        // SHA-256 (sni already carries the fake domain). The connection stays
+        // secure while DPI sees the masquerade SNI.
+        if (host.pinnedPeerCertSha256) {
+            node.fingerprint = host.pinnedPeerCertSha256;
+        }
+
         return node;
     }
 }

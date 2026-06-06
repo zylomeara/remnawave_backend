@@ -258,21 +258,23 @@ export class FormatHostsService {
                 if (inputHost.sni && inputHost.sni !== realDomain) {
                     if (realDomain) {
                         verifyPeerCertByName = realDomain;
-                    } else {
-                        try {
-                            const certLines = (
-                                tlsSettings as unknown as {
-                                    certificates?: Array<{ certificate?: string[] }>;
-                                }
-                            )?.certificates?.[0]?.certificate;
-                            if (Array.isArray(certLines) && certLines.length > 0) {
-                                pinnedPeerCertSha256 = new X509Certificate(
-                                    certLines.join('\n'),
-                                ).fingerprint256.replace(/:/g, '');
+                    }
+                    // Always compute the cert hash on fake-SNI: Happ falls back to it
+                    // when there's no real domain, and Mihomo (which has no
+                    // verify-by-name) pins the cert with it.
+                    try {
+                        const certLines = (
+                            tlsSettings as unknown as {
+                                certificates?: Array<{ certificate?: string[] }>;
                             }
-                        } catch {
-                            // no pcs if the inbound cert can't be parsed (e.g. file-based)
+                        )?.certificates?.[0]?.certificate;
+                        if (Array.isArray(certLines) && certLines.length > 0) {
+                            pinnedPeerCertSha256 = new X509Certificate(
+                                certLines.join('\n'),
+                            ).fingerprint256.replace(/:/g, '');
                         }
+                    } catch {
+                        // no pcs if the inbound cert can't be parsed (e.g. file-based)
                     }
                 }
 
