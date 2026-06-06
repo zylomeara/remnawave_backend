@@ -34,6 +34,8 @@ export interface IFormattedHost {
     allowInsecure?: boolean;
     obfsType?: string;
     obfsPassword?: string;
+    verifyPeerCertByName?: string;
+    pinnedPeerCertSha256?: string;
     shuffleHost?: boolean;
     mihomoX25519?: boolean;
     dbData?: IDbHostData;

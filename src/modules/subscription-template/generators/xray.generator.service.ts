@@ -297,6 +297,15 @@ export class XrayGeneratorService {
             payload['obfs-password'] = params.obfsPassword;
         }
 
+        // Fake-SNI: validate the cert against the real domain (pcn) while showing a
+        // fake SNI to DPI, or pin the cert by hash (pcs) when there is no real domain.
+        if (params.verifyPeerCertByName) {
+            payload.pcn = params.verifyPeerCertByName;
+        }
+        if (params.pinnedPeerCertSha256) {
+            payload.pcs = params.pinnedPeerCertSha256;
+        }
+
         const stringPayload = this.convertPayloadToString(payload);
         const queryString = new URLSearchParams(stringPayload).toString();
         const query = queryString ? `?${queryString}` : '';

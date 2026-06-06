@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto';
+import { randomUUID, X509Certificate } from 'node:crypto';
 import { filter, shuffle } from 'lodash';
 import { customAlphabet } from 'nanoid';
 
@@ -246,6 +246,36 @@ export class FormatHostsService {
                     }
                 }
 
+                // Fake-SNI support: when the admin sets an SNI that isn't the real
+                // domain (to masquerade as an allowed host), the client must NOT
+                // validate the cert against that fake name. Emit pcn to verify the
+                // cert against the real domain (keeps the real LE cert) when a real
+                // domain is known, otherwise pcs to pin the cert by its hash.
+                let verifyPeerCertByName: string | undefined;
+                let pinnedPeerCertSha256: string | undefined;
+                const realDomain =
+                    (this.domainRegex.test(address) ? address : '') || sniFromConfig || '';
+                if (inputHost.sni && inputHost.sni !== realDomain) {
+                    if (realDomain) {
+                        verifyPeerCertByName = realDomain;
+                    } else {
+                        try {
+                            const certLines = (
+                                tlsSettings as unknown as {
+                                    certificates?: Array<{ certificate?: string[] }>;
+                                }
+                            )?.certificates?.[0]?.certificate;
+                            if (Array.isArray(certLines) && certLines.length > 0) {
+                                pinnedPeerCertSha256 = new X509Certificate(
+                                    certLines.join('\n'),
+                                ).fingerprint256.replace(/:/g, '');
+                            }
+                        } catch {
+                            // no pcs if the inbound cert can't be parsed (e.g. file-based)
+                        }
+                    }
+                }
+
                 formattedHosts.push({
                     remark: finalRemark,
                     address,
@@ -269,6 +299,8 @@ export class FormatHostsService {
                     allowInsecure: inputHost.allowInsecure || allowInsecureFromConfig,
                     obfsType,
                     obfsPassword,
+                    verifyPeerCertByName,
+                    pinnedPeerCertSha256,
                     dbData,
                     xrayJsonTemplate: inputHost.xrayJsonTemplate,
                 });
