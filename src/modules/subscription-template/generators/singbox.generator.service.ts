@@ -24,6 +24,7 @@ interface OutboundConfig {
     early_data_header_name?: string;
     up_mbps?: number;
     down_mbps?: number;
+    obfs?: { type: string; password: string };
 }
 
 interface TlsConfig {
@@ -340,6 +341,9 @@ export class SingBoxGeneratorService {
                             host.alpn || 'h3',
                             host.allowInsecure,
                         );
+                    }
+                    if (host.obfsType && host.obfsPassword) {
+                        outbound.obfs = { type: host.obfsType, password: host.obfsPassword };
                     }
                     break;
             }

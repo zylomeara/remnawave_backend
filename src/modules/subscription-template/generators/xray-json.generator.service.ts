@@ -15,6 +15,7 @@ interface StreamSettings {
     realitySettings?: unknown;
     grpcSettings?: unknown;
     sockopt?: unknown;
+    finalmask?: unknown;
 }
 
 interface OutboundSettings {
@@ -211,6 +212,13 @@ export class XrayJsonGeneratorService {
             if (host.tls === 'tls') {
                 streamSettings.security = 'tls';
                 streamSettings.tlsSettings = this.createTlsSettings(host);
+            }
+
+            // Salamander obfs for Xray-based clients — same finalmask block as the server.
+            if (host.obfsType && host.obfsPassword) {
+                streamSettings.finalmask = {
+                    udp: [{ type: host.obfsType, settings: { password: host.obfsPassword } }],
+                };
             }
 
             return streamSettings;

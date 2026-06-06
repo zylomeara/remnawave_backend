@@ -537,6 +537,12 @@ export class MihomoGeneratorService {
             node['skip-cert-verify'] = host.allowInsecure;
         }
 
+        // Salamander obfs (Clash/Mihomo format), matching the server's finalmask.
+        if (host.obfsType && host.obfsPassword) {
+            node.obfs = host.obfsType;
+            node['obfs-password'] = host.obfsPassword;
+        }
+
         return node;
     }
 }
