@@ -32,6 +32,8 @@ export interface IFormattedHost {
     sockoptParams?: null | object;
     serverDescription?: string;
     allowInsecure?: boolean;
+    obfsType?: string;
+    obfsPassword?: string;
     shuffleHost?: boolean;
     mihomoX25519?: boolean;
     dbData?: IDbHostData;

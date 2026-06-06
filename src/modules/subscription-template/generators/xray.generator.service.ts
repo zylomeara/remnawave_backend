@@ -292,6 +292,11 @@ export class XrayGeneratorService {
             payload.insecure = 1;
         }
 
+        if (params.obfsType && params.obfsPassword) {
+            payload.obfs = params.obfsType;
+            payload['obfs-password'] = params.obfsPassword;
+        }
+
         const stringPayload = this.convertPayloadToString(payload);
         const queryString = new URLSearchParams(stringPayload).toString();
         const query = queryString ? `?${queryString}` : '';

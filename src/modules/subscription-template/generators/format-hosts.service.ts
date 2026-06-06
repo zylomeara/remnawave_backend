@@ -226,6 +226,26 @@ export class FormatHostsService {
                     };
                 }
 
+                // Salamander obfs: read the password from the inbound's finalmask
+                // so the client link carries the matching obfs-password. The admin
+                // configures it only on the inbound — single source of truth.
+                let obfsType: string | undefined;
+                let obfsPassword: string | undefined;
+                const finalmaskUdp = (
+                    inbound.streamSettings as unknown as {
+                        finalmask?: {
+                            udp?: Array<{ type?: string; settings?: { password?: string } }>;
+                        };
+                    }
+                )?.finalmask?.udp;
+                if (Array.isArray(finalmaskUdp)) {
+                    const salamander = finalmaskUdp.find((m) => m?.type === 'salamander');
+                    if (salamander?.settings?.password) {
+                        obfsType = 'salamander';
+                        obfsPassword = salamander.settings.password;
+                    }
+                }
+
                 formattedHosts.push({
                     remark: finalRemark,
                     address,
@@ -247,6 +267,8 @@ export class FormatHostsService {
                     },
                     serverDescription,
                     allowInsecure: inputHost.allowInsecure || allowInsecureFromConfig,
+                    obfsType,
+                    obfsPassword,
                     dbData,
                     xrayJsonTemplate: inputHost.xrayJsonTemplate,
                 });
