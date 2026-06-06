@@ -297,12 +297,13 @@ export class XrayGeneratorService {
             payload['obfs-password'] = params.obfsPassword;
         }
 
-        // Fake-SNI: validate the cert against the real domain (pcn) while showing a
-        // fake SNI to DPI, or pin the cert by hash (pcs) when there is no real domain.
-        if (params.verifyPeerCertByName) {
-            payload.pcn = params.verifyPeerCertByName;
-        } else if (params.pinnedPeerCertSha256) {
+        // Fake-SNI: pin the cert by hash (pcs) — works on both iOS and Android Happ.
+        // pcn (verifyPeerCertByName) is Android-only (3.23.0+) and breaks iOS, so we
+        // prefer the universal pin and fall back to pcn only when no cert is available.
+        if (params.pinnedPeerCertSha256) {
             payload.pcs = params.pinnedPeerCertSha256;
+        } else if (params.verifyPeerCertByName) {
+            payload.pcn = params.verifyPeerCertByName;
         }
 
         const stringPayload = this.convertPayloadToString(payload);
